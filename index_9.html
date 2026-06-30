@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>יחד — מרכז ניהול</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=Frank+Ruhl+Libre:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#f3f1e9;--surface:#ffffff;--surface-soft:#eef6f4;
+  --text:#10302f;--muted:#52606d;--border:#dbe5e2;
+  --accent:#0f5c56;--accent-deep:#0a3f3b;--accent-soft:#d3f0ec;--accent-bright:#38b6a2;
+  --gold:#c9963c;--gold-bg:#fbf2de;--gold-border:#ecd7a5;
+  --green:#1f8a4c;--green-bg:#e7f6ec;--green-border:#bfe3cb;
+  --red:#c0392f;--red-bg:#fdecea;--red-border:#f3c2bd;
+  --purple:#6b4ba0;--purple-bg:#f1ecf9;
+  --tiktok-bg:#1a1a2e;--tiktok-t:#b7c0ff;
+  --instagram-bg:#5b1f7a;--instagram-t:#f0b8f4;
+  --facebook-bg:#1f5fc4;--facebook-t:#ffffff;
+  --linkedin-bg:#0a4d8c;--linkedin-t:#ffffff;
+  --shadow-sm:0 2px 8px rgba(15,60,55,0.06);
+  --shadow:0 12px 32px rgba(15,60,55,0.10);
+  --shadow-lg:0 20px 56px rgba(15,60,55,0.16);
+  --r-lg:28px;--r:20px;--r-sm:14px;--r-xs:10px;
+}
+*{-webkit-tap-highlight-color:transparent;}
+body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+::selection{background:var(--accent-soft);}
+
+/* ── TOPBAR ── */
+.topbar{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:0 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:72px;
+  position:sticky;top:0;z-index:200;
+  box-shadow:var(--shadow-sm);
+}
+.brand{display:flex;align-items:center;gap:14px;}
+.brand-mark{
+  width:46px;height:46px;border-radius:16px;
+  background:linear-gradient(150deg,var(--accent) 0%,var(--accent-bright) 100%);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-family:'Frank Ruhl Libre',serif;font-weight:900;font-size:20px;
+  box-shadow:0 6px 16px rgba(15,92,86,0.28);
+  flex-shrink:0;
+  position:relative;
+}
+.brand-mark::after{
+  content:'';position:absolute;inset:0;border-radius:16px;
+  background:radial-gradient(circle at 30% 20%, rgba(255,255,255,0.35), transparent 60%);
+}
+.brand-text strong{display:block;font-family:'Frank Ruhl Libre',serif;font-size:18px;font-weight:700;letter-spacing:0.2px;}
+.brand-text span{display:block;font-size:11.5px;color:var(--muted);margin-top:1px;letter-spacing:0.2px;}
+.topbar-actions{display:flex;align-items:center;gap:10px;}
+.sync-chip{
+  display:flex;align-items:center;gap:7px;font-size:12.5px;
+  background:var(--surface-soft);padding:7px 15px;border-radius:999px;
+  border:1px solid var(--border);color:var(--muted);font-weight:500;
+}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background 0.2s;}
+.sync-dot.ok{background:var(--green);}
+.sync-dot.err{background:var(--red);}
+.sync-dot.loading{background:var(--gold);animation:pulse 1.1s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.8);}}
+
+/* ── NAV ── */
+.nav-wrap{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;}
+.nav{display:flex;gap:4px;}
+.nav-item{
+  font-size:13.5px;font-weight:600;padding:16px 22px;cursor:pointer;
+  color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px;
+  transition:all 0.18s;display:flex;align-items:center;gap:8px;
+  letter-spacing:0.1px;
+}
+.nav-item.active{color:var(--accent-deep);border-bottom-color:var(--accent);}
+.nav-item:hover:not(.active){color:var(--text);background:var(--surface-soft);}
+
+.main{padding:32px;max-width:1180px;margin:0 auto;}
+.view{display:none;}.view.active{display:block;animation:fadeIn 0.3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── SETUP BANNER ── */
+.setup-banner{
+  background:linear-gradient(120deg,var(--gold-bg),#fff);
+  border:1px solid var(--gold-border);border-radius:var(--r);
+  padding:20px 24px;margin-bottom:28px;
+  box-shadow:var(--shadow-sm);
+}
+.setup-banner.hidden{display:none;}
+.setup-title{font-size:13.5px;font-weight:700;color:#8a6418;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+.setup-desc{font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.55;}
+.setup-row{display:flex;gap:10px;flex-wrap:wrap;}
+.setup-input{
+  font-size:13.5px;padding:11px 16px;border-radius:var(--r-xs);
+  border:1px solid var(--gold-border);background:#fff;color:var(--text);
+  font-family:'Heebo',sans-serif;flex:1;min-width:220px;outline:none;
+}
+.setup-input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);}
+
+/* ── STAT CARDS ── */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;}
+.stat-card{
+  background:var(--surface);border-radius:var(--r);padding:22px 24px;
+  box-shadow:var(--shadow-sm);border:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.stat-card::before{
+  content:'';position:absolute;top:0;right:0;width:5px;height:100%;
+}
+.stat-card.tone-accent::before{background:var(--accent);}
+.stat-card.tone-green::before{background:var(--green);}
+.stat-card.tone-gold::before{background:var(--gold);}
+.stat-card.tone-muted::before{background:#c7d0ce;}
+.stat-num{font-family:'Frank Ruhl Libre',serif;font-size:38px;font-weight:700;line-height:1;margin-bottom:6px;}
+.stat-label{font-size:12.5px;color:var(--muted);font-weight:500;}
+.stat-track{height:4px;border-radius:3px;margin-top:14px;background:var(--surface-soft);overflow:hidden;}
+.stat-fill{height:100%;border-radius:3px;transition:width 0.4s ease;}
+
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;font-size:13.5px;
+  font-family:'Heebo',sans-serif;padding:10px 20px;border-radius:var(--r-xs);
+  border:1px solid var(--border);background:var(--surface);color:var(--text);
+  cursor:pointer;font-weight:600;transition:all 0.18s;white-space:nowrap;
+}
+.btn:hover{background:var(--surface-soft);border-color:#c7d0ce;}
+.btn-primary{
+  background:var(--accent);border-color:var(--accent);color:#fff;
+  box-shadow:0 6px 18px rgba(15,92,86,0.24);
+}
+.btn-primary:hover{background:var(--accent-deep);box-shadow:0 8px 22px rgba(15,92,86,0.32);transform:translateY(-1px);}
+.btn-sm{padding:7px 14px;font-size:12px;}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--muted);}
+.btn-ghost:hover{background:var(--surface-soft);color:var(--text);border-color:transparent;}
+.btn-export{background:var(--green-bg);border-color:var(--green-border);color:var(--green);}
+.btn-export:hover{background:#d6f0dd;}
+.btn-disconnect{background:transparent;border:none;color:var(--muted);font-size:12.5px;cursor:pointer;padding:6px 10px;border-radius:8px;font-weight:500;}
+.btn-disconnect:hover{background:var(--red-bg);color:var(--red);}
+
+/* ── CONTROLS ── */
+.toolbar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center;}
+.field-select{
+  font-size:13px;padding:9px 14px;height:40px;border-radius:var(--r-xs);
+  border:1px solid var(--border);background:var(--surface);color:var(--text);
+  outline:none;cursor:pointer;font-weight:500;
+}
+.field-select:focus{border-color:var(--accent);}
+.field-input{
+  font-size:13px;padding:9px 16px;height:40px;border-radius:var(--r-xs);
+  border:1px solid var(--border);background:var(--surface);color:var(--text);outline:none;
+}
+.field-input:focus{border-color:var(--accent);}
+
+/* ── PLATFORM FILTER PILLS ── */
+.platform-filter-label{font-size:11.5px;color:var(--muted);margin-bottom:10px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+.pill{
+  font-size:12.5px;padding:8px 17px;border-radius:999px;cursor:pointer;
+  border:1.5px solid var(--border);color:var(--muted);font-weight:600;
+  transition:all 0.18s;font-family:'Heebo',sans-serif;background:var(--surface);
+}
+.pill:hover{border-color:#b8c4c1;}
+.pill.sel-all{background:var(--accent);color:#fff;border-color:var(--accent);}
+.pill.sel-tiktok{background:var(--tiktok-bg);color:var(--tiktok-t);border-color:var(--tiktok-bg);}
+.pill.sel-instagram{background:var(--instagram-bg);color:var(--instagram-t);border-color:var(--instagram-bg);}
+.pill.sel-facebook{background:var(--facebook-bg);color:var(--facebook-t);border-color:var(--facebook-bg);}
+.pill.sel-linkedin{background:var(--linkedin-bg);color:var(--linkedin-t);border-color:var(--linkedin-bg);}
+
+/* ── SECTION HEADER ── */
+.group-hdr{
+  font-size:11.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;
+  color:var(--muted);padding:8px 0 10px;border-bottom:1px solid var(--border);
+  margin-bottom:14px;margin-top:26px;display:flex;align-items:center;gap:9px;
+}
+.group-hdr:first-child{margin-top:0;}
+.group-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+
+/* ── TASK CARDS ── */
+.task-list{display:flex;flex-direction:column;gap:10px;}
+.task-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:18px 22px;transition:all 0.2s;border-right:5px solid transparent;
+  box-shadow:var(--shadow-sm);
+}
+.task-card:hover{box-shadow:var(--shadow);transform:translateX(-2px);}
+.task-row{display:flex;align-items:flex-start;gap:14px;}
+.task-body{flex:1;min-width:0;}
+.task-title{font-size:14.5px;font-weight:700;color:var(--text);margin-bottom:5px;line-height:1.4;}
+.task-title.done{text-decoration:line-through;color:var(--muted);}
+.task-desc{font-size:12.5px;color:var(--muted);line-height:1.65;}
+.task-chips{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap;align-items:center;}
+
+/* ── BADGES / CHIPS ── */
+.chip{font-size:11px;padding:4px 11px;border-radius:999px;font-weight:700;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;}
+.cat-admin{background:#e3eefb;color:#1c5ca8;}
+.cat-platforms{background:var(--green-bg);color:var(--green);}
+.cat-content{background:var(--gold-bg);color:#8a6418;}
+.cat-influencers{background:var(--purple-bg);color:var(--purple);}
+.cat-admin_tasks{background:var(--red-bg);color:var(--red);}
+.status-done{background:var(--green-bg);color:var(--green);}
+.status-active{background:var(--gold-bg);color:#8a6418;}
+.status-pending{background:var(--surface-soft);color:var(--muted);}
+.plat-tiktok{background:var(--tiktok-bg);color:var(--tiktok-t);}
+.plat-instagram{background:var(--instagram-bg);color:var(--instagram-t);}
+.plat-facebook{background:var(--facebook-bg);color:var(--facebook-t);}
+.plat-linkedin{background:var(--linkedin-bg);color:var(--linkedin-t);}
+.appr-pending{background:var(--surface-soft);color:var(--muted);}
+.appr-approved{background:var(--green-bg);color:var(--green);}
+.appr-rejected{background:var(--red-bg);color:var(--red);}
+
+.meta-bit{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px;font-weight:500;}
+.task-link{font-size:12px;color:var(--accent);text-decoration:none;font-weight:600;}
+.task-link:hover{text-decoration:underline;}
+.fix-note{
+  font-size:12.5px;color:#9a3327;margin-top:10px;padding:10px 14px;
+  background:var(--red-bg);border-radius:var(--r-xs);border-right:3px solid var(--red);line-height:1.6;
+}
+.task-actions{display:flex;gap:5px;flex-shrink:0;}
+.icon-btn{
+  width:32px;height:32px;border-radius:var(--r-xs);border:1px solid var(--border);
+  background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-size:14px;transition:all 0.18s;
+}
+.icon-btn:hover{background:var(--surface-soft);color:var(--text);}
+.icon-btn.danger:hover{background:var(--red-bg);color:var(--red);border-color:var(--red-border);}
+.overdue{color:var(--red) !important;}
+
+/* ── CALENDAR ── */
+.cal-layout{display:flex;gap:24px;}
+.cal-sidebar{width:228px;flex-shrink:0;}
+.cal-content{flex:1;min-width:0;}
+.cal-plat-btn{
+  display:flex;align-items:center;gap:11px;width:100%;padding:11px 16px;
+  border-radius:var(--r-xs);border:1px solid var(--border);background:var(--surface);
+  color:var(--text);cursor:pointer;font-family:'Heebo',sans-serif;font-size:13px;
+  font-weight:600;margin-bottom:7px;transition:all 0.18s;
+}
+.cal-plat-btn:hover{background:var(--surface-soft);}
+.cal-plat-btn.sel-all{background:var(--accent);color:#fff;border-color:var(--accent);}
+.cal-plat-btn.sel-tiktok{background:var(--tiktok-bg);color:var(--tiktok-t);border-color:var(--tiktok-bg);}
+.cal-plat-btn.sel-instagram{background:var(--instagram-bg);color:var(--instagram-t);border-color:var(--instagram-bg);}
+.cal-plat-btn.sel-facebook{background:var(--facebook-bg);color:var(--facebook-t);border-color:var(--facebook-bg);}
+.cal-plat-btn.sel-linkedin{background:var(--linkedin-bg);color:var(--linkedin-t);border-color:var(--linkedin-bg);}
+.plat-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.cal-summary{margin-top:20px;padding:18px;background:var(--surface);border-radius:var(--r-sm);border:1px solid var(--border);box-shadow:var(--shadow-sm);}
+.summary-row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);padding:5px 0;}
+.summary-row strong{color:var(--text);font-weight:700;}
+.summary-total{border-top:1px solid var(--border);margin-top:8px;padding-top:10px;}
+
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.cal-title{font-family:'Frank Ruhl Libre',serif;font-size:21px;font-weight:700;}
+.cal-grid-hdr{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px;direction:ltr;}
+.cal-hdr-cell{font-size:11.5px;font-weight:700;text-align:center;color:var(--muted);padding:6px 0;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;direction:ltr;}
+.cal-cell{
+  min-height:96px;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-xs);padding:9px;cursor:pointer;transition:all 0.18s;
+  direction:rtl;
+}
+.cal-cell:hover{border-color:var(--accent);box-shadow:var(--shadow-sm);}
+.cal-cell.other{background:var(--bg);opacity:0.45;}
+.cal-cell.today{border-color:var(--accent);background:var(--accent-soft);}
+.cal-daynum{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px;text-align:right;}
+.cal-cell.today .cal-daynum{color:var(--accent-deep);}
+.cal-post-chip{
+  font-size:10.5px;font-weight:600;padding:3px 8px;border-radius:6px;margin-bottom:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;
+  display:flex;align-items:center;gap:4px;
+}
+.cal-post-chip::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,0.75);}
+.chip-tiktok{background:var(--tiktok-bg);color:var(--tiktok-t);}
+.chip-instagram{background:var(--instagram-bg);color:var(--instagram-t);}
+.chip-facebook{background:var(--facebook-bg);color:var(--facebook-t);}
+.chip-linkedin{background:var(--linkedin-bg);color:var(--linkedin-t);}
+.cal-more{font-size:10.5px;color:var(--muted);margin-top:2px;font-weight:600;}
+
+/* ── GANTT ── */
+.gantt-shell{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow-x:auto;}
+.gantt-table{width:100%;border-collapse:collapse;min-width:680px;}
+.gantt-table th{
+  font-size:11px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;
+  color:var(--muted);padding:14px 16px;text-align:right;border-bottom:1px solid var(--border);
+  background:var(--surface-soft);
+}
+.gantt-table td{padding:13px 16px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;}
+.gantt-table tr:last-child td{border-bottom:none;}
+.gantt-table tr:hover td{background:var(--bg);}
+.gantt-bar-track{background:var(--surface-soft);border-radius:5px;height:15px;position:relative;overflow:hidden;}
+.gantt-bar{height:100%;border-radius:5px;position:absolute;right:0;min-width:8px;}
+.bar-done{background:linear-gradient(90deg,#1f8a4c,#4fc77a);}
+.bar-active{background:linear-gradient(90deg,#c9963c,#e8b96a);}
+.bar-pending{background:#cdd6d3;}
+
+/* ── MODAL ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;background:rgba(16,48,47,0.5);
+  z-index:600;align-items:center;justify-content:center;padding:18px;
+  backdrop-filter:blur(2px);
+}
+.modal-overlay.open{display:flex;}
+.modal-box{
+  background:var(--surface);border-radius:var(--r);border:1px solid var(--border);
+  box-shadow:var(--shadow-lg);padding:28px;width:100%;max-width:540px;
+  max-height:90vh;overflow-y:auto;
+}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;}
+.modal-head h3{font-family:'Frank Ruhl Libre',serif;font-size:19px;font-weight:700;}
+.modal-x{
+  width:34px;height:34px;border-radius:var(--r-xs);border:1px solid var(--border);
+  background:transparent;cursor:pointer;font-size:16px;color:var(--muted);
+}
+.modal-x:hover{background:var(--surface-soft);}
+.field-group{margin-bottom:15px;}
+.field-group label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px;letter-spacing:0.2px;}
+.field-group input,.field-group select,.field-group textarea{
+  width:100%;font-size:13.5px;padding:10px 14px;border-radius:var(--r-xs);
+  border:1px solid var(--border);background:var(--surface);color:var(--text);
+  font-family:'Heebo',sans-serif;outline:none;transition:border-color 0.18s;
+}
+.field-group input:focus,.field-group select:focus,.field-group textarea:focus{
+  border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);
+}
+.field-group textarea{resize:vertical;min-height:64px;line-height:1.6;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.field-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;padding-top:18px;border-top:1px solid var(--border);}
+.field-divider{
+  font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--accent);margin:20px 0 14px;padding-bottom:7px;border-bottom:1px solid var(--accent-soft);
+}
+
+/* ── PLATFORM TOGGLE BUTTONS (in modal) ── */
+.toggle-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:7px;}
+.toggle-btn{
+  font-size:12.5px;padding:7px 15px;border-radius:999px;cursor:pointer;
+  border:1.5px solid var(--border);color:var(--muted);font-weight:600;
+  transition:all 0.18s;font-family:'Heebo',sans-serif;background:var(--surface);
+}
+.toggle-btn.t-tiktok{background:var(--tiktok-bg);color:var(--tiktok-t);border-color:var(--tiktok-bg);}
+.toggle-btn.t-instagram{background:var(--instagram-bg);color:var(--instagram-t);border-color:var(--instagram-bg);}
+.toggle-btn.t-facebook{background:var(--facebook-bg);color:var(--facebook-t);border-color:var(--facebook-bg);}
+.toggle-btn.t-linkedin{background:var(--linkedin-bg);color:var(--linkedin-t);border-color:var(--linkedin-bg);}
+
+.empty-state{text-align:center;padding:64px 18px;color:var(--muted);}
+.empty-icon{font-size:42px;margin-bottom:12px;}
+
+@media(max-width:760px){
+  .stat-row{grid-template-columns:1fr 1fr;}
+  .main{padding:18px;}
+  .topbar,.nav-wrap{padding:0 18px;}
+  .cal-layout{flex-direction:column;}
+  .cal-sidebar{width:100%;}
+  .field-row3{grid-template-columns:1fr 1fr;}
+  .brand-text span{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-mark">י</div>
+    <div class="brand-text">
+      <strong>יחד — מרכז ניהול</strong>
+      <span>העמותה לחייל הבודד</span>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <div class="sync-chip">
+      <div class="sync-dot" id="sync-dot"></div>
+      <span id="sync-text">לא מחובר</span>
+    </div>
+    <button class="btn-disconnect" id="disconnect-btn" onclick="disconnectKey()" style="display:none">🔑 שנה מפתח</button>
+    <button class="btn btn-sm btn-export" onclick="exportCSV()">📥 ייצוא CSV</button>
+  </div>
+</div>
+
+<div class="nav-wrap">
+  <div class="nav">
+    <div class="nav-item active" onclick="switchView('tasks')">✓ משימות</div>
+    <div class="nav-item" onclick="switchView('calendar')">📅 לוח תוכן</div>
+    <div class="nav-item" onclick="switchView('gantt')">📊 גאנט</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="setup-banner" id="setup-banner">
+    <div class="setup-title">🔑 חיבור לענן — JSONBin</div>
+    <p class="setup-desc">הכנס את ה-API Key שלך מ-JSONBin כדי לסנכרן את הנתונים בין כל המכשירים והמשתמשים.</p>
+    <div class="setup-row">
+      <input type="password" class="setup-input" id="api-key-input" placeholder="הכנס API Key מ-JSONBin..."/>
+      <button class="btn btn-primary" onclick="saveApiKey()">חבר</button>
+    </div>
+  </div>
+
+  <!-- TASKS VIEW -->
+  <div class="view active" id="view-tasks">
+    <div class="stat-row" id="stats"></div>
+
+    <div style="margin-bottom:4px;">
+      <div class="platform-filter-label">סנן לפי פלטפורמה</div>
+      <div class="pill-row">
+        <button class="pill sel-all" id="tpf-all" onclick="setTaskPlatFilter('all')">הכל</button>
+        <button class="pill" id="tpf-tiktok" onclick="setTaskPlatFilter('tiktok')">TikTok</button>
+        <button class="pill" id="tpf-instagram" onclick="setTaskPlatFilter('instagram')">אינסטגרם</button>
+        <button class="pill" id="tpf-facebook" onclick="setTaskPlatFilter('facebook')">פייסבוק</button>
+        <button class="pill" id="tpf-linkedin" onclick="setTaskPlatFilter('linkedin')">לינקדאין</button>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <select class="field-select" id="filter-cat" onchange="renderTasks()">
+        <option value="">כל הקטגוריות</option>
+        <option value="admin">אדמיניסטרציה</option>
+        <option value="platforms">פלטפורמות</option>
+        <option value="content">תוכן</option>
+        <option value="influencers">משפיענים</option>
+        <option value="admin_tasks">משימות שוטפות</option>
+      </select>
+      <select class="field-select" id="filter-status" onchange="renderTasks()">
+        <option value="">כל הסטטוסים</option>
+        <option value="done">הושלם</option>
+        <option value="active">בתהליך</option>
+        <option value="pending">ממתין</option>
+      </select>
+      <select class="field-select" id="filter-approval" onchange="renderTasks()">
+        <option value="">כל האישורים</option>
+        <option value="approved">✅ מאושר</option>
+        <option value="rejected">❌ לא מאושר</option>
+        <option value="pending">⏳ ממתין</option>
+      </select>
+      <input type="text" class="field-input" id="search" placeholder="🔍 חיפוש..." oninput="renderTasks()" style="width:160px"/>
+      <button class="btn btn-primary" style="margin-right:auto" onclick="openTaskModal()">+ משימה חדשה</button>
+    </div>
+    <div class="task-list" id="task-list"></div>
+  </div>
+
+  <!-- CALENDAR VIEW -->
+  <div class="view" id="view-calendar">
+    <div class="toolbar" style="margin-bottom:22px;">
+      <button class="btn btn-primary" style="margin-right:auto" onclick="openPostModal()">+ פוסט חדש</button>
+    </div>
+    <div class="cal-layout">
+      <div class="cal-sidebar">
+        <div class="platform-filter-label">פלטפורמה</div>
+        <button class="cal-plat-btn sel-all" id="cpf-all" onclick="setCalPlatFilter('all')"><span class="plat-dot" style="background:#fff"></span>הכל</button>
+        <button class="cal-plat-btn" id="cpf-tiktok" onclick="setCalPlatFilter('tiktok')"><span class="plat-dot" style="background:var(--tiktok-t)"></span>TikTok</button>
+        <button class="cal-plat-btn" id="cpf-instagram" onclick="setCalPlatFilter('instagram')"><span class="plat-dot" style="background:var(--instagram-t)"></span>אינסטגרם</button>
+        <button class="cal-plat-btn" id="cpf-facebook" onclick="setCalPlatFilter('facebook')"><span class="plat-dot" style="background:#fff"></span>פייסבוק</button>
+        <button class="cal-plat-btn" id="cpf-linkedin" onclick="setCalPlatFilter('linkedin')"><span class="plat-dot" style="background:#fff"></span>לינקדאין</button>
+        <div class="cal-summary">
+          <div class="platform-filter-label" style="margin-bottom:12px;">סיכום חודשי</div>
+          <div id="cal-summary"></div>
+        </div>
+      </div>
+      <div class="cal-content">
+        <div class="cal-nav">
+          <button class="btn" onclick="changeMonth(-1)">→ הקודם</button>
+          <div class="cal-title" id="cal-title"></div>
+          <button class="btn" onclick="changeMonth(1)">הבא ←</button>
+        </div>
+        <div class="cal-grid-hdr" id="cal-headers"></div>
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GANTT VIEW -->
+  <div class="view" id="view-gantt">
+    <div class="toolbar">
+      <button class="btn btn-primary" style="margin-right:auto" onclick="openTaskModal()">+ משימה חדשה</button>
+    </div>
+    <div class="gantt-shell">
+      <table class="gantt-table">
+        <thead>
+          <tr>
+            <th style="width:28%">משימה</th>
+            <th style="width:10%">אחראי</th>
+            <th style="width:10%">סטטוס</th>
+            <th style="width:12%">אישור הנהלה</th>
+            <th style="width:10%">תאריך</th>
+            <th>התקדמות</th>
+          </tr>
+        </thead>
+        <tbody id="gantt-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- TASK MODAL -->
+<div class="modal-overlay" id="task-modal" onclick="closeBg(event,'task-modal')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="task-modal-title">משימה חדשה</h3>
+      <button class="modal-x" onclick="closeModal('task-modal')">✕</button>
+    </div>
+    <div class="field-group"><label>שם המשימה *</label><input type="text" id="tf-name" placeholder="תיאור קצר..."/></div>
+    <div class="field-group"><label>פירוט</label><textarea id="tf-desc" placeholder="הסבר נוסף..."></textarea></div>
+    <div class="field-row">
+      <div class="field-group"><label>קטגוריה</label>
+        <select id="tf-cat" onchange="updateCatVis()">
+          <option value="admin">🔵 אדמיניסטרציה</option>
+          <option value="platforms">🟢 פלטפורמות</option>
+          <option value="content">🟡 תוכן</option>
+          <option value="influencers">🟣 משפיענים</option>
+          <option value="admin_tasks">🔴 משימות שוטפות</option>
+        </select>
+      </div>
+      <div class="field-group"><label>סטטוס</label>
+        <select id="tf-status">
+          <option value="pending">⚪ ממתין</option>
+          <option value="active">🟡 בתהליך</option>
+          <option value="done">🟢 הושלם</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field-group"><label>אחראי</label><input type="text" id="tf-owner" placeholder="פבל / מור..."/></div>
+      <div class="field-group"><label>תאריך יעד</label><input type="date" id="tf-date"/></div>
+    </div>
+    <div class="field-group" id="tf-plat-wrap">
+      <label>פלטפורמות</label>
+      <div class="toggle-row">
+        <button type="button" class="toggle-btn" id="tp-tiktok-m" onclick="toggleTP('tiktok')">TikTok</button>
+        <button type="button" class="toggle-btn" id="tp-instagram-m" onclick="toggleTP('instagram')">אינסטגרם</button>
+        <button type="button" class="toggle-btn" id="tp-facebook-m" onclick="toggleTP('facebook')">פייסבוק</button>
+        <button type="button" class="toggle-btn" id="tp-linkedin-m" onclick="toggleTP('linkedin')">לינקדאין</button>
+      </div>
+    </div>
+    <div class="field-group"><label>לינק</label><input type="url" id="tf-link" placeholder="https://..."/></div>
+    <div class="field-divider">אישור הנהלה</div>
+    <div class="field-group"><label>סטטוס אישור</label>
+      <select id="tf-approval">
+        <option value="pending">⏳ ממתין לאישור</option>
+        <option value="approved">✅ מאושר</option>
+        <option value="rejected">❌ לא מאושר — יש לתקן</option>
+      </select>
+    </div>
+    <div class="field-group"><label>הוראות תיקון</label><textarea id="tf-fix" placeholder="מה צריך לתקן?..." style="min-height:54px"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('task-modal')">ביטול</button>
+      <button class="btn btn-primary" onclick="saveTask()">שמור משימה</button>
+    </div>
+  </div>
+</div>
+
+<!-- POST MODAL -->
+<div class="modal-overlay" id="post-modal" onclick="closeBg(event,'post-modal')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="post-modal-title">פוסט חדש</h3>
+      <button class="modal-x" onclick="closeModal('post-modal')">✕</button>
+    </div>
+    <div class="field-group"><label>כותרת / תיאור *</label><input type="text" id="pf-name" placeholder="על מה הפוסט?"/></div>
+    <div class="field-row">
+      <div class="field-group"><label>תאריך פרסום</label><input type="date" id="pf-date"/></div>
+      <div class="field-group"><label>סוג תוכן</label>
+        <select id="pf-type">
+          <option>גיוס תורמים</option><option>פנייה לחיילים</option>
+          <option>תיעוד אירוע</option><option>מאחורי הקלעים</option>
+          <option>גיוס מתנדבים</option><option>תוכן רב-לשוני</option>
+          <option>סרטון מתנדב</option><option>סרטון הסברה</option>
+          <option>סרטון חייל</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-group">
+      <label>פלטפורמות</label>
+      <div class="toggle-row">
+        <button type="button" class="toggle-btn" id="pb-tiktok" onclick="togglePP('tiktok')">TikTok</button>
+        <button type="button" class="toggle-btn" id="pb-instagram" onclick="togglePP('instagram')">אינסטגרם</button>
+        <button type="button" class="toggle-btn" id="pb-facebook" onclick="togglePP('facebook')">פייסבוק</button>
+        <button type="button" class="toggle-btn" id="pb-linkedin" onclick="togglePP('linkedin')">לינקדאין</button>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field-group"><label>אחראי</label><input type="text" id="pf-owner" placeholder="פבל..."/></div>
+      <div class="field-group"><label>סטטוס</label>
+        <select id="pf-status">
+          <option value="pending">⚪ טיוטה</option>
+          <option value="active">🟡 מוכן לפרסום</option>
+          <option value="done">🟢 פורסם</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-group"><label>לינק לפוסט</label><input type="url" id="pf-link" placeholder="https://..."/></div>
+    <div class="field-divider">סטטיסטיקות (לאחר פרסום)</div>
+    <div class="field-row3">
+      <div class="field-group"><label>👁️ צפיות</label><input type="number" id="pf-views" placeholder="0" min="0"/></div>
+      <div class="field-group"><label>❤️ לייקים</label><input type="number" id="pf-likes" placeholder="0" min="0"/></div>
+      <div class="field-group"><label>🔁 שיתופים</label><input type="number" id="pf-shares" placeholder="0" min="0"/></div>
+    </div>
+    <div class="field-row">
+      <div class="field-group"><label>💬 תגובות</label><input type="number" id="pf-comments" placeholder="0" min="0"/></div>
+      <div class="field-group"><label>🔖 שמירות</label><input type="number" id="pf-saves" placeholder="0" min="0"/></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('post-modal')">ביטול</button>
+      <button class="btn btn-primary" onclick="savePost()">שמור פוסט</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const CAT={admin:'אדמיניסטרציה',platforms:'פלטפורמות',content:'תוכן',influencers:'משפיענים',admin_tasks:'משימות שוטפות'};
+const CAT_COLOR={admin:'#1c5ca8',platforms:'#1f8a4c',content:'#c9963c',influencers:'#6b4ba0',admin_tasks:'#c0392f'};
+const STATUS={done:'הושלם',active:'בתהליך',pending:'ממתין'};
+const APPROVAL={pending:'⏳ ממתין',approved:'✅ מאושר',rejected:'❌ לא מאושר'};
+const MONTHS=['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+const DAYS=['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'];
+const PLAT_NAME={tiktok:'TikTok',instagram:'אינסטגרם',facebook:'פייסבוק',linkedin:'לינקדאין'};
+const BIN_ID='6a26c00bf5f4af5e29cb741e';
+const API_BASE='https://api.jsonbin.io/v3/b';
+
+// Real tasks captured from prior app screenshots
+const DEFAULT_TASKS=[
+  {id:1,name:'תיקון שם העמותה',desc:'שינוי ל"יחד העמותה לחייל הבודד" בכל הפרסומים',cat:'admin',status:'pending',owner:'צוות',date:'',platforms:[],approval:'pending',fix:'',link:''},
+  {id:2,name:'עדכון מספר חיילים ל-7,000',desc:'עדכון באתר ובפרסומים',cat:'admin',status:'pending',owner:'פבל',date:'',platforms:[],approval:'pending',fix:'',link:''},
+  {id:6,name:'פתיחת חשבון TikTok',desc:'הקמה וניהול ראשוני',cat:'platforms',status:'pending',owner:'פבל',date:'',platforms:['tiktok'],approval:'pending',fix:'',link:''},
+  {id:7,name:'הקמת עמוד לינקדאין',desc:'עמוד ארגוני מקצועי',cat:'platforms',status:'pending',owner:'פבל',date:'',platforms:['linkedin'],approval:'pending',fix:'',link:''},
+  {id:8,name:'חיבור בין כל הפלטפורמות',desc:'חיבור בין כל הפלטפורמות: פייסבוק, אינסטגרם, אתר לפרסום במקביל',cat:'platforms',status:'pending',owner:'',date:'',platforms:[],approval:'pending',fix:'',link:''},
+  {id:9,name:'רשימת משפיענים (עד 10)',desc:'לאישור הנהלת העמותה — עזרה מור (דובר רוסית, 51K עוקבים אינסטגרם, הסברה ברוסית על מדיניות ישראלית) | לוסי (40K+ עוקבים, הסברה צרכנית ומדינית) | ניצן שפירא (עיתונאי ערוץ 12, 100K+ עוקבים, מילואימניק)',cat:'influencers',status:'active',owner:'פבל',date:'',platforms:[],approval:'pending',fix:'',link:'https://www.instagram.com/ezramorshow'},
+  {id:10,name:'פנייה לפוליטיקאים',desc:'ליברמן, אדלשטיין ואחרים לביקור וחשיפה',cat:'influencers',status:'pending',owner:'פבל',date:'',platforms:[],approval:'pending',fix:'',link:''},
+  {id:11,name:'2 סרטונים שבועיים',desc:'ריאלז/טיקטוקים לפרסום שוטף',cat:'content',status:'active',owner:'פבל',date:'',platforms:['tiktok','instagram'],approval:'pending',fix:'',link:''},
+  {id:12,name:'מה הדבר הכי שווה שקיבלת בעמותה',desc:'שואל את החיילים איזה דברים הכי שווים הם קיבלו בעמותה',cat:'content',status:'pending',owner:'',date:'',platforms:['tiktok'],approval:'pending',fix:'',link:''},
+  {id:13,name:'איזה מילה הכי מוזרה למדתם בצבא',desc:'',cat:'content',status:'pending',owner:'',date:'',platforms:[],approval:'pending',fix:'',link:''},
+  {id:14,name:'מייסדים ומתנדבים של עמותה',desc:'בכל שבוע נבחר בן אדם אחד ונעלה עליו פוסט בפייסבוק ובלינקדאין, כדי לחשוף את האנשים המדהימים שעומדים מאחורי הקלעים של העמותה',cat:'content',status:'pending',owner:'',date:'',platforms:['facebook','linkedin'],approval:'pending',fix:'',link:''},
+  {id:15,name:'גם בזמן מלחמה — אנחנו כאן 🚨',desc:'מאז פרוץ המערכה מול איראן ולבנון, ישראל נמצאת במצב מיוחד בעורף... הדלתות פתוחות. הסיר על האש. האוזן קשבת. כי דווקא עכשיו, כשהמדינה כולה במתח, החייל הבודד לא יכול להרשות לעצמו גם להיות לבד. (פוסט מלא בארכיון התוכן)',cat:'content',status:'pending',owner:'פבל',date:'',platforms:['linkedin'],approval:'pending',fix:'',link:''},
+  {id:16,name:'סרטון על אחד המתנדבים של עמותה',desc:'סיפור אישי קצר איך הוא או היא הגיעו לעמותה ולמה? מה לדעתו/ה מייחד את העמותה? מה גורם לו/ה להמשיך להתנדב בעמותה? האם יש סיפור שנחרט בזכרונך?',cat:'content',status:'pending',owner:'פבל',date:'',platforms:['facebook','linkedin'],approval:'pending',fix:'',link:''},
+  {id:17,name:'סרטון הסברה לתורמים ומתנדבים — מראיינים את רן',desc:'"עמותת יחד. שמי רן, מנכ\"ל יחד — העמותה לחייל הבודד." אני רוצה לספר לכם מי אנחנו - איך ומתי הוקמה העמותה? כמה חיילים בודדים יש בעמותה? איך פעילות העמותה מתקיימת? (סיכום: כל זה קורה אך ורק בזכות אנשים כמוכם — בואו להיות חלק ממשפחת יחד)',cat:'content',status:'pending',owner:'פבל',date:'',platforms:['instagram','facebook'],approval:'pending',fix:'',link:''},
+  {id:18,name:'סרטון הסברה לחיילים בודדים — איפה העמותה ואיך עוזרת',desc:'חיילים וחיילות בודדים? גרים בחיפה או באזור? תכירו את \'יחד\'. מה תוכלו לקבל: אוכל לשישי שבת, ריהוט וציוד, ביגוד, מתנות לחגים, חברים לאורך החיים, אוזן קשבת וכביסה. פתוחה כל יום שישי 10:00–14:30, קדושי יאסי 2, מרכז הקונגרסים, חיפה',cat:'content',status:'pending',owner:'פבל',date:'',platforms:['tiktok','instagram'],approval:'pending',fix:'',link:''},
+  {id:19,name:'סרטון סיפור של חייל\\ת בודד\\ת',desc:'',cat:'content',status:'pending',owner:'פבל',date:'',platforms:['tiktok','instagram','facebook'],approval:'pending',fix:'',link:''},
+  {id:20,name:'תכירו את \'יחד\' — העמותה לחייל הבודד',desc:'🪖 יש חיילים שמגנים עלינו — בלי שיש להם מישהו שמגן עליהם. הוקמה ב-2009. 2,400 חיילים עברו דרכנו, 130 כל יום שישי, 4,000 ביקורים בשנה, 85% נשארו בארץ. כולל קריאה להתנדבות, תרומה ותמיכה כספית. #יחדלחייל #חיילבודד',cat:'content',status:'pending',owner:'',date:'',platforms:['linkedin'],approval:'pending',fix:'',link:''},
+];
+
+let tasks=[], posts=[], editingTaskId=null, editingPostId=null;
+let calYear=new Date().getFullYear(), calMonth=new Date().getMonth();
+let selTP=[], selPP=[];
+let taskPlatFilter='all', calPlatFilter='all';
+let syncing=false;
+
+const getKey=()=>localStorage.getItem('yachad_api_key')||'';
+
+function disconnectKey(){
+  localStorage.removeItem('yachad_api_key');
+  document.getElementById('setup-banner').classList.remove('hidden');
+  document.getElementById('disconnect-btn').style.display='none';
+  setSyncStatus('','לא מחובר');
+}
+function saveApiKey(){
+  const k=document.getElementById('api-key-input').value.trim(); if(!k)return;
+  localStorage.setItem('yachad_api_key',k);
+  document.getElementById('setup-banner').classList.add('hidden');
+  document.getElementById('disconnect-btn').style.display='';
+  setSyncStatus('loading','מתחבר...');
+  loadCloud();
+}
+function setSyncStatus(state,text){
+  document.getElementById('sync-dot').className='sync-dot'+(state?' '+state:'');
+  const t=document.getElementById('sync-text');
+  t.textContent=text;
+  t.style.color=state==='ok'?'var(--green)':state==='err'?'var(--red)':state==='loading'?'#8a6418':'var(--muted)';
+}
+async function loadCloud(){
+  const k=getKey(); if(!k){loadLocal();return;}
+  setSyncStatus('loading','טוען...');
+  try{
+    const r=await fetch(`${API_BASE}/${BIN_ID}/latest`,{headers:{'X-Master-Key':k,'X-Bin-Meta':false}});
+    if(!r.ok)throw new Error();
+    const d=await r.json();
+    tasks=d.tasks&&d.tasks.length?d.tasks:DEFAULT_TASKS;
+    posts=d.posts||[];
+    setSyncStatus('ok','מסונכרן ✓');
+  }catch(e){setSyncStatus('err','שגיאת חיבור');loadLocal();}
+  renderTasks();
+}
+function loadLocal(){
+  try{tasks=JSON.parse(localStorage.getItem('yt_v10'))||DEFAULT_TASKS;}catch{tasks=DEFAULT_TASKS;}
+  try{posts=JSON.parse(localStorage.getItem('yp_v7'))||[];}catch{posts=[];}
+}
+async function saveCloud(){
+  const k=getKey(); if(!k){saveLocal();return;}
+  if(syncing)return; syncing=true;
+  setSyncStatus('loading','שומר...');
+  try{
+    await fetch(`${API_BASE}/${BIN_ID}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':k},body:JSON.stringify({tasks,posts})});
+    setSyncStatus('ok','מסונכרן ✓');
+  }catch(e){setSyncStatus('err','שגיאת שמירה');saveLocal();}
+  syncing=false;
+}
+function saveLocal(){
+  localStorage.setItem('yt_v10',JSON.stringify(tasks));
+  localStorage.setItem('yp_v7',JSON.stringify(posts));
+}
+
+function exportCSV(){
+  const rows=[['שם','תיאור','קטגוריה','סטטוס','אישור','אחראי','תאריך','פלטפורמות','הוראות תיקון','לינק']];
+  tasks.forEach(t=>rows.push([t.name,t.desc||'',CAT[t.cat]||'',STATUS[t.status]||'',APPROVAL[t.approval||'pending']||'',t.owner||'',t.date||'',(t.platforms||[]).join(', '),t.fix||'',t.link||'']));
+  rows.push([]);
+  rows.push(['פוסט','סוג','פלטפורמות','תאריך','אחראי','סטטוס','לינק','צפיות','לייקים','שיתופים','תגובות','שמירות']);
+  posts.forEach(p=>rows.push([p.name,p.type||'',(p.platforms||[]).join(', '),p.date||'',p.owner||'',p.status||'',p.link||'',p.views||0,p.likes||0,p.shares||0,p.comments||0,p.saves||0]));
+  const csv='\uFEFF'+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv); a.download='yachad_data.csv'; a.click();
+}
+
+function switchView(id){
+  document.querySelectorAll('.nav-item').forEach((t,i)=>t.classList.toggle('active',['tasks','calendar','gantt'][i]===id));
+  document.querySelectorAll('.view').forEach(p=>p.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  if(id==='calendar')renderCalendar();
+  if(id==='gantt')renderGantt();
+}
+
+function setTaskPlatFilter(p){
+  taskPlatFilter=p;
+  ['all','tiktok','instagram','facebook','linkedin'].forEach(pl=>{
+    document.getElementById('tpf-'+pl).className='pill'+(pl===p?' sel-'+pl:'');
+  });
+  renderTasks();
+}
+
+function renderStats(){
+  const tot=tasks.length,done=tasks.filter(t=>t.status==='done').length;
+  const act=tasks.filter(t=>t.status==='active').length,pend=tasks.filter(t=>t.status==='pending').length;
+  const pct=n=>tot?Math.round(n/tot*100):0;
+  document.getElementById('stats').innerHTML=`
+    <div class="stat-card tone-accent"><div class="stat-num" style="color:var(--accent)">${tot}</div><div class="stat-label">סה"כ משימות</div><div class="stat-track"><div class="stat-fill" style="width:100%;background:var(--accent)"></div></div></div>
+    <div class="stat-card tone-green"><div class="stat-num" style="color:var(--green)">${done}</div><div class="stat-label">הושלמו</div><div class="stat-track"><div class="stat-fill" style="width:${pct(done)}%;background:var(--green)"></div></div></div>
+    <div class="stat-card tone-gold"><div class="stat-num" style="color:#8a6418">${act}</div><div class="stat-label">בתהליך</div><div class="stat-track"><div class="stat-fill" style="width:${pct(act)}%;background:var(--gold)"></div></div></div>
+    <div class="stat-card tone-muted"><div class="stat-num" style="color:var(--muted)">${pend}</div><div class="stat-label">ממתינות</div><div class="stat-track"><div class="stat-fill" style="width:${pct(pend)}%;background:#c7d0ce"></div></div></div>`;
+}
+
+function renderTasks(){
+  renderStats();
+  const cf=document.getElementById('filter-cat').value;
+  const sf=document.getElementById('filter-status').value;
+  const af=document.getElementById('filter-approval').value;
+  const q=document.getElementById('search').value.toLowerCase();
+  let filtered=tasks.filter(t=>{
+    if(cf&&t.cat!==cf)return false;
+    if(sf&&t.status!==sf)return false;
+    if(af&&(t.approval||'pending')!==af)return false;
+    if(taskPlatFilter!=='all'&&!(t.platforms||[]).includes(taskPlatFilter))return false;
+    if(q&&!t.name.toLowerCase().includes(q)&&!(t.desc||'').toLowerCase().includes(q))return false;
+    return true;
+  });
+  const groups={};
+  filtered.forEach(t=>{if(!groups[t.cat])groups[t.cat]=[]; groups[t.cat].push(t);});
+  const el=document.getElementById('task-list');
+  if(!filtered.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">🔍</div>אין משימות תואמות לסינון הנוכחי</div>';return;}
+  let html='';
+  Object.entries(groups).forEach(([cat,ts])=>{
+    const cc=CAT_COLOR[cat]||'#888';
+    html+=`<div class="group-hdr"><span class="group-dot" style="background:${cc}"></span>${CAT[cat]||cat}</div>`;
+    ts.forEach(t=>{
+      const cc=CAT_COLOR[t.cat]||'#888';
+      const apr=t.approval||'pending';
+      const over=t.date&&new Date(t.date)<new Date()&&t.status!=='done';
+      const plats=(t.platforms||[]).map(p=>`<span class="chip plat-${p}">${PLAT_NAME[p]||p}</span>`).join('');
+      html+=`<div class="task-card" style="border-right-color:${cc}">
+        <div class="task-row">
+          <div class="task-body">
+            <div class="task-title ${t.status==='done'?'done':''}">${t.name}</div>
+            ${t.desc?`<div class="task-desc">${t.desc}</div>`:''}
+            <div class="task-chips">
+              <span class="chip cat-${t.cat}">${CAT[t.cat]}</span>
+              <span class="chip status-${t.status}">${STATUS[t.status]}</span>
+              <span class="chip appr-${apr}">${APPROVAL[apr]}</span>
+              ${plats}
+              ${t.owner?`<span class="meta-bit">👤 ${t.owner}</span>`:''}
+              ${t.date?`<span class="meta-bit ${over?'overdue':''}">📅 ${fd(t.date)}${over?' ⚠️':''}</span>`:''}
+              ${t.link?`<a class="task-link" href="${t.link}" target="_blank">🔗 לינק</a>`:''}
+            </div>
+            ${apr==='rejected'&&t.fix?`<div class="fix-note">🔧 <strong>לתיקון:</strong> ${t.fix}</div>`:''}
+          </div>
+          <div class="task-actions">
+            <button class="icon-btn" onclick="cycleStatus(${t.id})" title="שנה סטטוס">↻</button>
+            <button class="icon-btn" onclick="editTask(${t.id})" title="ערוך">✎</button>
+            <button class="icon-btn danger" onclick="delTask(${t.id})" title="מחק">✕</button>
+          </div>
+        </div>
+      </div>`;
+    });
+  });
+  el.innerHTML=html;
+}
+
+const fd=d=>{if(!d)return''; const[y,m,day]=d.split('-'); return`${day}/${m}/${y}`;};
+
+async function cycleStatus(id){
+  const t=tasks.find(t=>t.id===id); if(!t)return;
+  const o=['pending','active','done'];
+  t.status=o[(o.indexOf(t.status)+1)%3];
+  await saveCloud(); renderTasks();
+  if(document.getElementById('view-gantt').classList.contains('active'))renderGantt();
+}
+async function delTask(id){if(!confirm('למחוק את המשימה?'))return; tasks=tasks.filter(t=>t.id!==id); await saveCloud(); renderTasks();}
+
+function updateCatVis(){
+  const c=document.getElementById('tf-cat').value;
+  document.getElementById('tf-plat-wrap').style.display=(c==='content'||c==='platforms'||c==='influencers')?'block':'none';
+}
+function toggleTP(p){
+  const i=selTP.indexOf(p); if(i>-1)selTP.splice(i,1); else selTP.push(p);
+  ['tiktok','instagram','facebook','linkedin'].forEach(pl=>document.getElementById('tp-'+pl+'-m').className='toggle-btn'+(selTP.includes(pl)?' t-'+pl:''));
+}
+function openTaskModal(){
+  editingTaskId=null; selTP=[];
+  document.getElementById('task-modal-title').textContent='משימה חדשה';
+  ['tf-name','tf-desc','tf-owner','tf-date','tf-link','tf-fix'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('tf-cat').value='admin';
+  document.getElementById('tf-status').value='pending';
+  document.getElementById('tf-approval').value='pending';
+  ['tiktok','instagram','facebook','linkedin'].forEach(p=>document.getElementById('tp-'+p+'-m').className='toggle-btn');
+  updateCatVis();
+  document.getElementById('task-modal').classList.add('open');
+}
+function editTask(id){
+  const t=tasks.find(t=>t.id===id); if(!t)return; editingTaskId=id;
+  selTP=[...(t.platforms||[])];
+  document.getElementById('task-modal-title').textContent='עריכת משימה';
+  document.getElementById('tf-name').value=t.name;
+  document.getElementById('tf-desc').value=t.desc||'';
+  document.getElementById('tf-cat').value=t.cat;
+  document.getElementById('tf-status').value=t.status;
+  document.getElementById('tf-owner').value=t.owner||'';
+  document.getElementById('tf-date').value=t.date||'';
+  document.getElementById('tf-approval').value=t.approval||'pending';
+  document.getElementById('tf-fix').value=t.fix||'';
+  document.getElementById('tf-link').value=t.link||'';
+  ['tiktok','instagram','facebook','linkedin'].forEach(pl=>document.getElementById('tp-'+pl+'-m').className='toggle-btn'+(selTP.includes(pl)?' t-'+pl:''));
+  updateCatVis();
+  document.getElementById('task-modal').classList.add('open');
+}
+async function saveTask(){
+  const name=document.getElementById('tf-name').value.trim(); if(!name)return;
+  const task={id:editingTaskId||Date.now(),name,
+    desc:document.getElementById('tf-desc').value.trim(),
+    cat:document.getElementById('tf-cat').value,
+    status:document.getElementById('tf-status').value,
+    owner:document.getElementById('tf-owner').value.trim(),
+    date:document.getElementById('tf-date').value,
+    platforms:[...selTP],
+    approval:document.getElementById('tf-approval').value,
+    fix:document.getElementById('tf-fix').value.trim(),
+    link:document.getElementById('tf-link').value.trim()};
+  if(editingTaskId)tasks=tasks.map(t=>t.id===editingTaskId?task:t); else tasks.push(task);
+  await saveCloud(); closeModal('task-modal'); renderTasks();
+}
+
+/* CALENDAR */
+function setCalPlatFilter(p){
+  calPlatFilter=p;
+  ['all','tiktok','instagram','facebook','linkedin'].forEach(pl=>{
+    document.getElementById('cpf-'+pl).className='cal-plat-btn'+(pl===p?' sel-'+pl:'');
+  });
+  renderCalendar();
+}
+
+function renderCalendar(){
+  document.getElementById('cal-title').textContent=`${MONTHS[calMonth]} ${calYear}`;
+  document.getElementById('cal-headers').innerHTML=DAYS.map(d=>`<div class="cal-hdr-cell">${d}</div>`).join('');
+
+  const first=new Date(calYear,calMonth,1);
+  const startDay=first.getDay();
+  const dim=new Date(calYear,calMonth+1,0).getDate();
+  const pd=new Date(calYear,calMonth,0).getDate();
+  const today=new Date();
+
+  const fp=calPlatFilter==='all'?posts:posts.filter(p=>(p.platforms||[]).includes(calPlatFilter));
+
+  const monthPosts=fp.filter(p=>{
+    if(!p.date)return false;
+    const[y,m]=p.date.split('-');
+    return Number(y)===calYear&&Number(m)-1===calMonth;
+  });
+  const sum={tiktok:0,instagram:0,facebook:0,linkedin:0};
+  monthPosts.forEach(p=>(p.platforms||[]).forEach(pl=>{if(sum[pl]!==undefined)sum[pl]++;}));
+  document.getElementById('cal-summary').innerHTML=
+    `<div class="summary-row"><span>TikTok</span><strong>${sum.tiktok}</strong></div>
+     <div class="summary-row"><span>אינסטגרם</span><strong>${sum.instagram}</strong></div>
+     <div class="summary-row"><span>פייסבוק</span><strong>${sum.facebook}</strong></div>
+     <div class="summary-row"><span>לינקדאין</span><strong>${sum.linkedin}</strong></div>
+     <div class="summary-row summary-total"><span>סה"כ</span><strong>${monthPosts.length}</strong></div>`;
+
+  let cells='';
+  for(let i=0;i<startDay;i++) cells+=`<div class="cal-cell other"><div class="cal-daynum">${pd-startDay+1+i}</div></div>`;
+  for(let d=1;d<=dim;d++){
+    const ds=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday=today.getFullYear()===calYear&&today.getMonth()===calMonth&&today.getDate()===d;
+    const dp=fp.filter(p=>p.date===ds);
+    const shown=dp.slice(0,3);
+    const extra=dp.length-3;
+    const ph=shown.map(p=>{
+      const pl=(p.platforms||[])[0]||'tiktok';
+      return`<div class="cal-post-chip chip-${pl}" onclick="event.stopPropagation();editPost(${p.id})" title="${p.name}">${p.name}</div>`;
+    }).join('');
+    const ex=extra>0?`<div class="cal-more">+${extra} עוד</div>`:'';
+    cells+=`<div class="cal-cell ${isToday?'today':''}" onclick="openPostOnDay('${ds}')"><div class="cal-daynum">${d}</div>${ph}${ex}</div>`;
+  }
+  const rem=(7-(startDay+dim)%7)%7;
+  for(let i=1;i<=rem;i++) cells+=`<div class="cal-cell other"><div class="cal-daynum">${i}</div></div>`;
+  document.getElementById('cal-grid').innerHTML=cells;
+}
+
+function changeMonth(d){calMonth+=d; if(calMonth>11){calMonth=0;calYear++;} if(calMonth<0){calMonth=11;calYear--;} renderCalendar();}
+function openPostOnDay(date){openPostModal(); document.getElementById('pf-date').value=date;}
+
+function togglePP(p){
+  const i=selPP.indexOf(p); if(i>-1)selPP.splice(i,1); else selPP.push(p);
+  ['tiktok','instagram','facebook','linkedin'].forEach(pl=>document.getElementById('pb-'+pl).className='toggle-btn'+(selPP.includes(pl)?' t-'+pl:''));
+}
+function openPostModal(){
+  editingPostId=null; selPP=[];
+  document.getElementById('post-modal-title').textContent='פוסט חדש';
+  ['pf-name','pf-date','pf-owner','pf-link','pf-views','pf-likes','pf-shares','pf-comments','pf-saves'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('pf-type').value='גיוס תורמים';
+  document.getElementById('pf-status').value='pending';
+  ['tiktok','instagram','facebook','linkedin'].forEach(p=>document.getElementById('pb-'+p).className='toggle-btn');
+  document.getElementById('post-modal').classList.add('open');
+}
+function editPost(id){
+  const p=posts.find(p=>p.id===id); if(!p)return; editingPostId=id;
+  selPP=[...(p.platforms||[])];
+  document.getElementById('post-modal-title').textContent='עריכת פוסט';
+  document.getElementById('pf-name').value=p.name;
+  document.getElementById('pf-date').value=p.date||'';
+  document.getElementById('pf-type').value=p.type||'גיוס תורמים';
+  document.getElementById('pf-owner').value=p.owner||'';
+  document.getElementById('pf-status').value=p.status||'pending';
+  document.getElementById('pf-link').value=p.link||'';
+  document.getElementById('pf-views').value=p.views||'';
+  document.getElementById('pf-likes').value=p.likes||'';
+  document.getElementById('pf-shares').value=p.shares||'';
+  document.getElementById('pf-comments').value=p.comments||'';
+  document.getElementById('pf-saves').value=p.saves||'';
+  ['tiktok','instagram','facebook','linkedin'].forEach(pl=>document.getElementById('pb-'+pl).className='toggle-btn'+(selPP.includes(pl)?' t-'+pl:''));
+  document.getElementById('post-modal').classList.add('open');
+}
+async function savePost(){
+  const name=document.getElementById('pf-name').value.trim(); if(!name)return;
+  const post={id:editingPostId||Date.now(),name,
+    date:document.getElementById('pf-date').value,
+    type:document.getElementById('pf-type').value,
+    platforms:[...selPP],
+    owner:document.getElementById('pf-owner').value.trim(),
+    status:document.getElementById('pf-status').value,
+    link:document.getElementById('pf-link').value.trim(),
+    views:Number(document.getElementById('pf-views').value)||0,
+    likes:Number(document.getElementById('pf-likes').value)||0,
+    shares:Number(document.getElementById('pf-shares').value)||0,
+    comments:Number(document.getElementById('pf-comments').value)||0,
+    saves:Number(document.getElementById('pf-saves').value)||0};
+  if(editingPostId)posts=posts.map(p=>p.id===editingPostId?post:p); else posts.push(post);
+  await saveCloud(); closeModal('post-modal'); renderCalendar();
+}
+
+/* GANTT */
+function renderGantt(){
+  const sorted=[...tasks].sort((a,b)=>{if(!a.date&&!b.date)return 0; if(!a.date)return 1; if(!b.date)return -1; return new Date(a.date)-new Date(b.date);});
+  const hd=sorted.filter(t=>t.date);
+  const minD=hd.length?new Date(hd[0].date):new Date();
+  const maxD=hd.length?new Date(hd[hd.length-1].date):new Date();
+  const range=Math.max(1,(maxD-minD)/(864e5));
+  const pct=d=>{if(!d)return null; return Math.min(88,Math.max(0,Math.round((new Date(d)-minD)/(864e5)/range*88)));};
+  const rows=[...hd,...sorted.filter(t=>!t.date)].map(t=>{
+    const cc=CAT_COLOR[t.cat]||'#888';
+    const p=pct(t.date);
+    const apr=t.approval||'pending';
+    const bar=p!==null?`<div class="gantt-bar-track"><div class="gantt-bar bar-${t.status}" style="right:${p}%;width:${Math.max(8,100-p)}%"></div></div>`:`<div class="gantt-bar-track"><div class="gantt-bar bar-${t.status}" style="right:0;width:35%"></div></div>`;
+    return`<tr>
+      <td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${cc};margin-left:9px;vertical-align:middle"></span><span style="font-weight:600">${t.name}</span></td>
+      <td style="color:var(--muted);font-size:12px">${t.owner||'—'}</td>
+      <td><span class="chip status-${t.status}" style="font-size:10px">${STATUS[t.status]}</span></td>
+      <td><span class="chip appr-${apr}" style="font-size:10px">${APPROVAL[apr]}</span></td>
+      <td style="color:var(--muted);font-size:12px">${t.date?fd(t.date):'—'}</td>
+      <td>${bar}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('gantt-body').innerHTML=rows||'<tr><td colspan="6" style="text-align:center;padding:2.5rem;color:var(--muted)">אין משימות</td></tr>';
+}
+
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeBg(e,id){if(e.target.id===id)closeModal(id);}
+
+// INIT
+const initKey=getKey();
+if(initKey){
+  document.getElementById('setup-banner').classList.add('hidden');
+  document.getElementById('disconnect-btn').style.display='';
+  loadCloud();
+}else{
+  loadLocal();
+  renderTasks();
+}
+</script>
+</body>
+</html>
